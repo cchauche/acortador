@@ -1,6 +1,4 @@
-# Elixir CircleCI 2.0 configuration file
-# See: https://circleci.com/docs/2.0/language-elixir/
-version: 2
+version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -110,13 +108,12 @@ jobs:
           path: _build/test/lib/acortador # Replace with the name of your :app
 
 workflows:
-  version: 2
-  test:
+  build_test:
     jobs:
-    - build
-    - lint:
-      requires:
-        - build
-    - test:
-      requires:
-        - build
+      - build
+      - lint:
+          requires:
+            - build
+      - test:
+          requires:
+            - build
