@@ -113,10 +113,10 @@ workflows:
   version: 2
   test:
     jobs:
-      - build
-      - lint:
-        requires:
-          - build
-      - test:
-        requires:
-          - build
+    - build
+    - lint:
+      requires:
+        - build
+    - test:
+      requires:
+        - build
