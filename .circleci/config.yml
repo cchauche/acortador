@@ -6,6 +6,7 @@ version: 2
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
+    parallelism: 1
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -52,13 +53,73 @@ jobs:
           key: v1-build-cache-{{ .Branch }}
           paths: '_build'
 
+
+
+  lint:
+    parallelism: 1
+    docker:
+      - image: circleci/elixir:1.13.1
+        environment:
+          MIX_ENV: test
+
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - restore_cache: # restores saved mix cache
+          keys: # list of cache keys, in decreasing specificity
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache: # restores saved build cache
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+      - run: mix compile --force --warnings-as-errors
+      - run: mix hex.audit
+      - run: mix format --check-formatted
+      - run: mix credo --all --format=oneline
+
+  test:
+    parallelism: 1
+    docker:
+      - image: circleci/elixir:1.13.1
+        environment:
+          MIX_ENV: test
+
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - restore_cache: # restores saved mix cache
+          keys: # list of cache keys, in decreasing specificity
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache: # restores saved build cache
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
       - run: # special utility that stalls main process until DB is ready
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
+      - run: mix ecto.migrate # run migrations on database
       - run: mix test # run all tests in project
 
       - store_test_results: # upload junit test results for display in Test Summary
           # Read more: https://circleci.com/docs/2.0/collect-test-data/
           path: _build/test/lib/acortador # Replace with the name of your :app
 
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      -build
+      -lint:
+        requires:
+          - build
+      - test:
+        requires:
+          - build
