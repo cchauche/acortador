@@ -57,7 +57,7 @@ jobs:
           keys:
             - v1-build-cache-{{ .Branch }}
             - v1-build-cache
-      - run: mix compile --force --warnings-as-errors
+      - run: mix do deps.get, compile --force --warnings-as-errors
       - run: mix hex.audit
       - run: mix format --check-formatted
       - run: mix credo --all --format=oneline
@@ -88,6 +88,7 @@ jobs:
           keys:
             - v1-build-cache-{{ .Branch }}
             - v1-build-cache
+      - run: mix deps.get
       - run: # special utility that stalls main process until DB is ready
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
