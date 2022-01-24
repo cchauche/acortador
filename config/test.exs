@@ -28,3 +28,8 @@ config :acortador, Acortador.Mailer, adapter: Swoosh.Adapters.Test
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Configure JUnit Formatter to output test results to a custom dir
+config :junit_formatter,
+  report_dir: Path.expand("_build/test/lib/acortador"),
+  prepend_project_name?: true
