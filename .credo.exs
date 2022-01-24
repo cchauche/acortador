@@ -113,6 +113,7 @@
           {Credo.Check.Readability.TrailingBlankLine, []},
           {Credo.Check.Readability.TrailingWhiteSpace, []},
           {Credo.Check.Readability.UnnecessaryAliasExpansion, []},
+          {Credo.Check.Readability.SinglePipe, []},
           {Credo.Check.Readability.VariableNames, []},
           {Credo.Check.Readability.WithSingleClause, []},
 
@@ -156,20 +157,19 @@
           {Credo.Check.Warning.UnusedRegexOperation, []},
           {Credo.Check.Warning.UnusedStringOperation, []},
           {Credo.Check.Warning.UnusedTupleOperation, []},
-          {Credo.Check.Consistency.UnusedVariableNames, []},
-          {Credo.Check.Readability.SinglePipe, []},
           {Credo.Check.Warning.UnsafeExec, []},
           {Credo.Check.Warning.UnsafeToAtom, []}
-        ],
-        disabled: [
-          #
-          # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
+          ],
+          disabled: [
+            #
+            # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
 
-          #
-          # Controversial and experimental checks (opt-in, just move the check to `:enabled`
-          #   and be sure to use `mix credo --strict` to see low priority checks)
-          #
+            #
+            # Controversial and experimental checks (opt-in, just move the check to `:enabled`
+            #   and be sure to use `mix credo --strict` to see low priority checks)
+            #
           {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
+          {Credo.Check.Consistency.UnusedVariableNames, []},
           {Credo.Check.Design.DuplicatedCode, []},
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Readability.AliasAs, []},
