@@ -1,13 +1,24 @@
 defmodule Acortador.Umbrella.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       apps_path: "apps",
-      version: "0.1.0",
+      version: @version,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        acortador_umbrella: [
+          version: @version,
+          applications: [
+            acortador: :permanent,
+            acortador_web: :permanent
+          ]
+        ]
+      ]
     ]
   end
 
