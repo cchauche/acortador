@@ -88,7 +88,8 @@ RUN chown nobody /app
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/prod/rel/acortador_umbrella ./
+COPY entrypoint.sh .
 
 USER nobody
 
-CMD ["/app/bin/acortador_umbrella", "start"]
+CMD ["bash", "/app/entrypoint.sh"]

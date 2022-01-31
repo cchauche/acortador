@@ -16,6 +16,7 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
+  # sll: true is set for using Heroku's postgres service
   config :acortador, Acortador.Repo,
     ssl: true,
     url: database_url,
@@ -34,12 +35,17 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  # Get port number from ENV variable
+  port = String.to_integer(System.get_env("PORT") || "4000")
+
   config :acortador_web, AcortadorWeb.Endpoint,
+    # url: [host: "localhost", port: port],
+    url: [host: "damp-sands-83258.herokuapp.com", port: port],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
+      port: port
     ],
     secret_key_base: secret_key_base
 

@@ -21,10 +21,11 @@ defmodule Acortador.MixProject do
   # Configuration for the OTP application.
   #
   # Type `mix help compile.app` for more information.
+  # * For deploying with Heroku add :ssl to extra_applications
   def application do
     [
       mod: {Acortador.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ssl]
     ]
   end
 
